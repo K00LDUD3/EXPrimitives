@@ -16,16 +16,24 @@ anchor/
 ├── validation.py     # validation runner infrastructure, not the rules themselves
 ├── loaders.py        # load(path, overrides) — generic
 ├── registry.py       # string → class mapping
+├── paths.py
 └── __init__.py
 ```
 
-### Roles
+### Files 
 #### `base.py`
 #### `serialization.py`
 #### `validation.py`
 #### `loaders.py`
 #### `registry.py`
-#### `schemas/`
+
+### Changelog 
+#### V 1.0.1
+
+> `Anchor` can be **used but is incomplete** Made `anchor/validator.py` a stateless validator. Does not store global state of error strings. 
+
+> **TODO: TEST `anchor` with and without loaders.py** 
+
 
 ## 2. Echo
 ```text

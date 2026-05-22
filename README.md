@@ -3,7 +3,7 @@ An orthogonal set of python tools to be used in synergy to accelerate developmen
 
 Below are Axes which can be used independently or together as building blocks.
 
-## 1. Anchor
+## 1. Anchor (Config System)
 A config system. 
 
 Goal: Every experiment must be reproducable from a `config.yaml` source file. Source directory structure 
@@ -28,18 +28,15 @@ anchor/
 #### `registry.py`
 
 ### Changelog 
-#### V 1.0.1
+#### 0.0.1 (21-05-2026)
 
-> `Anchor` can be **used but is incomplete** Made `anchor/validator.py` a stateless validator. Does not store global state of error strings. 
-
-> **TODO: TEST `anchor` with and without loaders.py** 
-
+> `Anchor` can be **used but is incomplete (`registry.py`)** Made `anchor/validator.py` a stateless validator. Does not store global state of error strings. `registry.py` however will be stateful per run.
 
 ## 2. Echo
 ```text
 
 ```
-## 3. Ledger
+## 3. Ledger (Experiment Handler)
 ## 4. Frame
 ## 5. Guide
 ## 6. Augment

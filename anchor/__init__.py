@@ -1,3 +1,26 @@
+from .base import BaseConfig
+from . import base
+from . import paths
+from . import serialization
+from . import validation
+from . import registry
+from . import loaders
+from .loaders import load
+from . import types
+
+__all__ = [
+    "base",
+    "BaseConfig",
+    "paths",
+    "serialization",
+    "validation",
+    "registry",
+    "loaders",
+    "load",
+    "types",
+]
+
+
 """
 from anchor.base          import BaseConfig
 from anchor.types         import Device, Precision, LogLevel, Seed, Hz, Seconds
@@ -21,23 +44,3 @@ for adding all function to namespace
 """
 for a more heirarchical structure
 """
-import base
-from .base import BaseConfig
-
-from . import paths
-from . import serialization
-from . import validation
-from . import registry
-from . import loaders
-from . import types
-
-__all__ = [
-    "base",
-    "BaseConfig",
-    "paths",
-    "serialization",
-    "validation",
-    "registry",
-    "loaders",
-    "types",
-]

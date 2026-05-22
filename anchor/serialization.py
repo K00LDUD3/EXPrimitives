@@ -1,5 +1,5 @@
 from pathlib import Path
-from anchor.base import BaseConfig
+from .base import BaseConfig
 
 from json import dump as json__dump, load as json__load
 from yaml import load as yaml__load, safe_load as yaml__safe_load, dump as yaml__dump, Loader as yaml__Loader

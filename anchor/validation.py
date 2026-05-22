@@ -1,4 +1,4 @@
-from anchor.base import BaseConfig
+from .base import BaseConfig
 from typing import Callable
 
 """

@@ -30,7 +30,11 @@ anchor/
 ### Changelog 
 #### 0.0.1 (21-05-2026)
 
-> `Anchor` can be **used but is incomplete (`registry.py`)** Made `anchor/validator.py` a stateless validator. Does not store global state of error strings. `registry.py` however will be stateful per run.
+> `Anchor`: can be **used but is incomplete (`registry.py`)** Made `anchor/validator.py` a stateless validator. Does not store global state of error strings. `registry.py` however will be stateful per run.
+
+#### 0.0.2 (24-05-2026)
+
+> `Anchor`: updated `anchor.validate()` to support recursive validation. also included support for saving python dataclasses to disk - single file self-contained superconfiguration. user can now choose to store json/yaml/py. 
 
 ## 2. Echo
 ```text

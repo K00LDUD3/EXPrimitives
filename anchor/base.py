@@ -59,11 +59,26 @@ class BaseConfig:
 
     def validate(self) -> list[str]:
         """
-        Override in subclasses to return a list of error strings.
-        Empty list means valid.
-        Call super().validate() when overriding to chain parent checks.
+        Return a list of error strings for this config and all nested configs.
+
+        Override in subclasses to add validation rules.
+        Always call super().validate() first to ensure nested configs are checked.
+
+        Example:
+            def validate(self) -> list[str]:
+                errors = super().validate()
+                if self.dt <= 0:
+                    errors.append(f"SystemConfig: dt must be positive, got {self.dt}")
+                return errors
         """
+        errors = []
+        # automatically recurse into nested BaseConfig fields
+        for f in fields(self):
+            value = getattr(self, f.name)
+            if isinstance(value, BaseConfig):
+                errors.extend(value.validate())
         return []
+
     def field_names(self) -> list[str]:
         return [f.name for f in fields(self)]
 

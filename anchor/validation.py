@@ -14,6 +14,7 @@ anchor.validate(cfg, check_freq_compatibility)
 
 CrossValidator = Callable[[BaseConfig], list[str]]
 
+
 def validate(cfg: BaseConfig, *cross_validators: CrossValidator) -> None:
     """
     Run the config's own validate() method, then any cross-validators passed in.

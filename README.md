@@ -1,23 +1,20 @@
 # Prime-Fundamentum
-An orthogonal set of python tools to be used in synergy to accelerate development under the broad umbrella of simulation. 
-
 Below are Axes which can be used independently or together as building blocks.
 
-## 1. Anchor (Config System)
-A config system. 
+## A1. Anchor (Config System)
 
-Goal: Every experiment must be reproducable from a `config.yaml` source file. Source directory structure 
+Goal: Every experiment must be reproducable from a single source file. Source directory structure.
 
+Rest of the submodules will use Anchor(A1) to store prebuilt configs (tentative). 
 ```text
 anchor/
-├── base.py           # BaseConfig, frozen, fingerprint, replace
-├── types.py          # Device, Precision, LogLevel, Seed, Hz — shared primitives
-├── serialization.py  # save/load YAML/JSON — works on any BaseConfig
-├── validation.py     # validation runner infrastructure, not the rules themselves
-├── loaders.py        # load(path, overrides) — generic
-├── registry.py       # string → class mapping
-├── paths.py
-└── __init__.py
+├── base.py          
+├── types.py         
+├── serialization.py 
+├── validation.py    
+├── loaders.py       
+├── registry.py      
+└── paths.py          
 ```
 
 ### Files 
@@ -25,31 +22,37 @@ anchor/
 #### `serialization.py`
 #### `validation.py`
 #### `loaders.py`
-#### `registry.py`
+#### `registry.py` - [TODO]
+#### `paths.py`
 
 ### Changelog 
 #### 0.0.1 (21-05-2026)
 
-> `Anchor`: can be **used but is incomplete (`registry.py`)** Made `anchor/validator.py` a stateless validator. Does not store global state of error strings. `registry.py` however will be stateful per run.
+> `Anchor`: **incomplete (`registry.py`) but usable** Made `anchor/validator.py` a stateless validator. Does not store global state of error strings. `registry.py` however will be stateful per run.
 
 #### 0.0.2 (24-05-2026)
 
-> `Anchor`: updated `anchor.validate()` to support recursive validation. also included support for saving python dataclasses to disk - single file self-contained superconfiguration. user can now choose to store json/yaml/py. 
+> `Anchor`: updated `anchor.validate()` to support recursive validation. also included support for saving python dataclasses as a single file self-contained superconfiguration. user can now choose to store/load json/yaml/py. 
 
-## 2. Echo
-```text
-
+## A2. Echo
+```py
+echo/
+├── event.py          # Event dataclass + Level enum
+├── logger.py         # Logger class - primary API, tee to sinks, scope context
+├── sinks.py          # Sink protocol + ConsoleSink + FileSink
+├── formatter.py      # event -> human-readable string
+└── buffer.py         # buffered write queue for high-frequency logging, async support
 ```
-## 3. Ledger (Experiment Handler)
-## 4. Frame
-## 5. Guide
-## 6. Augment
-## 7. Gauge
-## 8. Probe
-## 9. Vault
-## 10. Canvas
-## 11. Oracle
-## 12. Stride
-## 13. Fence
-## 14. Torch
-## 15. Port
+## A3. Ledger (Experiment Handler)
+## A4. Frame
+## A5. Guide
+## A6. Augment
+## A7. Gauge
+## A8. Probe
+## A9. Vault
+## A10. Canvas
+## A11. Oracle
+## A12. Stride
+## A13. Fence
+## A14. Torch
+## A15. Port

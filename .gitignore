@@ -1,1 +1,4 @@
 principles.md
+anchor/requirements.md
+__pycache__/
+*.py[cod]

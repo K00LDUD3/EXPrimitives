@@ -1,11 +1,12 @@
 # echo/event.py
 from __future__ import annotations
-from enum import Enum
+from enum import Enum, IntEnum
 from dataclasses import dataclass, field
 from typing import Any
+from time import time
 
 
-class Level(Enum):
+class Level(IntEnum):
     """
     Log levels in ascending order of severity.
     Used by sinks to filter events below a minimum level.
@@ -14,6 +15,13 @@ class Level(Enum):
     INFO = 1
     WARNING = 2
     ERROR = 3
+
+
+MAX_LEVEL_LEN = 0
+for level in Level:
+    length = len(level.name)
+    if length > MAX_LEVEL_LEN:
+        MAX_LEVEL_LEN = length
 
 
 class EventType(Enum):
@@ -73,8 +81,9 @@ class Event:
         """
         ...
 
-    @staticmethod
+    @classmethod
     def now(
+        cls,
         level:      Level,
         event_type: EventType,
         message:    str,
@@ -91,4 +100,14 @@ class Event:
         Usage:
             event = Event.now(Level.INFO, EventType.TEXT, "step complete", {})
         """
-        ...
+        return cls(
+            timestamp=time(),
+            level=level,
+            event_type=event_type,
+            message=message,
+            payload=payload,
+            run_id=run_id,
+            module=module,
+            tags=tags,
+            step=step
+        )

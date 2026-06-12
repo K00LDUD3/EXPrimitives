@@ -393,6 +393,9 @@ ledger/
 
 #### Usage
 ```python
+# ledger usage examples
+# assumes exprim is on path: pip install -e /path/to/exprim
+
 from pathlib import Path
 import torch
 import tempfile
@@ -438,7 +441,7 @@ logger = Logger(
     run_id = run.run_id,
     sinks  = [
         ConsoleSink(min_level=Level.INFO),
-        FileSink(path=run.logs_path(), min_level=Level.DEBUG),
+        FileSink(path=run.logs_path(),    min_level=Level.DEBUG),
         FileSink(path=run.metrics_path(), min_level=Level.INFO),
     ]
 )
@@ -657,7 +660,7 @@ with ledger.ExperimentManager(runs_dir=RUNS_DIR) as manager:
         run_id = run.run_id,
         sinks  = [
             ConsoleSink(),
-            FileSink(path=run.logs_path(), min_level=Level.DEBUG),
+            FileSink(path=run.logs_path(),    min_level=Level.DEBUG),
             FileSink(path=run.metrics_path(), min_level=Level.INFO),
         ]
     )
@@ -666,7 +669,7 @@ with ledger.ExperimentManager(runs_dir=RUNS_DIR) as manager:
     try:
         for step in range(10000):
             logger.set_step(step)
-            logger.metric("reward", reward, throttle_steps=10)
+            logger.metric("reward",         reward, throttle_steps=10)
             logger.metric("control_effort", effort, throttle_steps=10)
 
             if step % 1000 == 0:
@@ -712,22 +715,16 @@ E: externals
 -->
 
 ### Changelog
-
-#### 0.0.0 - Enter `Anchor`
-
-`Anchor`: **incomplete (`registry.py`) but usable** Made *anchor/validator.py* a stateless validator. Does not store global state of error strings. `registry.py` however will be stateful per run.
+#### 0.0.0 - Enter `Anchor` 
+`Anchor`: **incomplete (`registry.py`) but usable** Made `anchor/validator.py` a stateless validator. Does not store global state of error strings. `registry.py` however will be stateful per run.
 
 #### 0.0.1
-
-`Anchor`: updated *anchor.validate()* to support recursive validation. also included support for saving python dataclasses as a single file self-contained superconfiguration. user can now choose to store/load json/yaml/py.
+`Anchor`: updated `anchor.validate()` to support recursive validation. also included support for saving python dataclasses as a single file self-contained superconfiguration. user can now choose to store/load json/yaml/py. 
 
 #### 1.0.0 - Enter `Echo`
-
-`Echo`: incomplete (`buffers.py`) but usable. syncronous event stream with *TEXT*, *METRIC* and *SCOPE* event types. *ConsoleSink* and *FileSink* (JSONL) suported. per-sink level filtering, step tracking, logging statistics. **TODO**: `buffers.py` implementation once need arises. 1.0.0-present uses a simple syncronous event buffer.
+`Echo`: incomplete (`buffers.py`) but usable. syncronous event stream with `TEXT`, `METRIC` and `SCOPE` event types. `ConsoleSink` and `FileSink` (JSONL) suported. per-sink level filtering, step tracking, logging statistics. **TODO**: `buffers.py` implementation once need arises. 1.0.0-present uses a simple syncronous event buffer.
 
 #### 2.0.0 - Enter `Ledger`
+`Anchor`: Added `save_json, save_python, save_yaml load_json load_python load_yaml` as top level imports. Can be used directly under anchor. Eg. `anchor.save_python` instead of previously `anchor.serialization.save_python`.
 
-`Anchor`: Added *save_json, save_python, save_yaml load_json load_python load_yaml* as top level imports. Can be used directly under anchor. Eg. *anchor.save_python* instead of previously *anchor.serialization.save_python*.
-
-`Ledger`: usable - SQLite backed experiment registry tracking runs by config fingerprint. per-run directory layout with config, logs, metrics, checkpoints, artifacts, and reproducibility snapshot (git hash, git diff, pip freeze, entry script). supports run lifecycle (create, load, resume, delete), tagging, notes, status marking, third-party logger injection via protocol, and basic metric comparison across runs. all paths stored relative - safe to relocate runs directory.
-
+`Ledger`: 

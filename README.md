@@ -1,6 +1,8 @@
 # EXPrimitives
 a bunch of Experiment Primitives (config handler, loggers, experiment handlers, etc) targetting experiment as well as simulation usage.
 
+> For strictly typed documentation across all submodules, see [documentation/documentation.md](https://github.com/K00LDUD3/EXPrimitives/blob/main/documentation/documentation.md).
+
 ## Group A:
 
 ### A1. Anchor (Config Handler)
@@ -686,6 +688,11 @@ with ledger.ExperimentManager(runs_dir=RUNS_DIR) as manager:
 ```
 
 
+## Group B:
+
+### B1. Gauge (Query & Analysis)
+Fluent query engine for single and multi-run metric inspection.
+
 ### Upcoming Primitives
 B1..B3, C1..C4, D1..D3, E1..E2
 <!--
@@ -713,7 +720,7 @@ E: externals
 
 ### Changelog
 
-#### 0.0.0 - Enter `Anchor`
+#### 0.0.0 - Add `Anchor`
 
 `Anchor`: **incomplete (`registry.py`) but usable** Made *anchor/validator.py* a stateless validator. Does not store global state of error strings. `registry.py` however will be stateful per run.
 
@@ -721,13 +728,19 @@ E: externals
 
 `Anchor`: updated *anchor.validate()* to support recursive validation. also included support for saving python dataclasses as a single file self-contained superconfiguration. user can now choose to store/load json/yaml/py.
 
-#### 1.0.0 - Enter `Echo`
+#### 1.0.0 - Add `Echo`
 
 `Echo`: incomplete (`buffers.py`) but usable. syncronous event stream with *TEXT*, *METRIC* and *SCOPE* event types. *ConsoleSink* and *FileSink* (JSONL) suported. per-sink level filtering, step tracking, logging statistics. **TODO**: `buffers.py` implementation once need arises. 1.0.0-present uses a simple syncronous event buffer.
 
-#### 2.0.0 - Enter `Ledger`
+#### 2.0.0 - Add `Ledger`
 
 `Anchor`: Added *save_json, save_python, save_yaml load_json load_python load_yaml* as top level imports. Can be used directly under anchor. Eg. *anchor.save_python* instead of previously *anchor.serialization.save_python*.
 
 `Ledger`: usable - SQLite backed experiment registry tracking runs by config fingerprint. per-run directory layout with config, logs, metrics, checkpoints, artifacts, and reproducibility snapshot (git hash, git diff, pip freeze, entry script). supports run lifecycle (create, load, resume, delete), tagging, notes, status marking, third-party logger injection via protocol, and basic metric comparison across runs. all paths stored relative - safe to relocate runs directory.
+
+#### 3.0.0 - Add `Gauge` & Documentation
+`Gauge`: Fluent query engine for single and multi-run metric inspection.
+
+
+
 

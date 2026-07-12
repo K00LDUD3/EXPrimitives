@@ -110,14 +110,7 @@ class CrossQuery:
         """Return the count of matching events per run."""
         return {run_id: len(events) for run_id, events in self.per_run().items()}
 
-    def find_nth(
-        self,
-        n: int,
-        match: str | None = None,
-        scope: str | None = None,
-        metric: str | None = None,
-        condition: Callable[[float], bool] | None = None,
-    ) -> dict[str, Event | None]:
+    def find_nth(self, n: int, match: str | None = None, scope: str | None = None, metric: str | None = None, condition: Callable[[float], bool] | None = None) -> dict[str, Event | None]:
         """
         Find the Nth occurrence of a match condition per run.
         match is a substring search on message text.
@@ -139,38 +132,23 @@ class CrossQuery:
             results[run_id] = q.nth(n)
         return results
 
-    def first_occurrence(
-        self,
-        match: str | None = None,
-        scope: str | None = None,
-    ) -> dict[str, Event | None]:
+    def first_occurrence(self, match: str | None = None, scope: str | None = None) -> dict[str, Event | None]:
         """Return the first occurrence of a match or scope entry per run."""
         return self.find_nth(1, match=match, scope=scope)
 
-    def last_occurrence(
-        self,
-        #match: str | None = None,
-    ) -> dict[str, list[Event]]:
+    def last_occurrence(self) -> dict[str, list[Event]]:  # match: str | None = None,
         """Return the last matching event per run."""
         result = {}
         for run_id, events in self.per_run().items():
             result[run_id] = events[-1] if events else None
         return result
 
-    def runs_without_match(
-        self,
-        match: str | None = None,
-        scope: str | None = None,
-    ) -> list[str]:
+    def runs_without_match(self, match: str | None = None, scope: str | None = None) -> list[str]:
         """Return run_ids where the condition never occurred."""
         hits = self.find_nth(1, match=match, scope=scope)
         return [run_id for run_id, event in hits.items() if event is None]
 
-    def runs_with_match(
-        self,
-        match: str | None = None,
-        scope: str | None = None,
-    ) -> list[str]:
+    def runs_with_match(self, match: str | None = None, scope: str | None = None) -> list[str]:
         """Return run_ids where the condition occurred at least once."""
         hits = self.find_nth(1, match=match, scope=scope)
         return [run_id for run_id, event in hits.items() if event is not None]
@@ -281,11 +259,7 @@ class CrossMetrics:
             results.append((run_id, best[1]))
         return sorted(results, key=lambda x: x[1], reverse=not ascending)
 
-    def convergence_per_run(
-        self,
-        tolerance: float = 0.01,
-        window: int   = 50,
-    ) -> dict[str, dict]:
+    def convergence_per_run(self, tolerance: float = 0.01, window: int = 50) -> dict[str, dict]:
         """
         Check convergence for each run.
         Returns dict of run_id to convergence result dict containing
@@ -302,11 +276,7 @@ class CrossMetrics:
             }
         return results
 
-    def fastest_convergence(
-        self,
-        tolerance: float = 0.01,
-        window: int   = 50,
-    ) -> tuple[str, int] | None:
+    def fastest_convergence(self, tolerance: float = 0.01, window: int = 50) -> tuple[str, int] | None:
         """Return (run_id, step) of the run that converged earliest."""
         conv = self.convergence_per_run(tolerance, window)
         candidates = [
@@ -316,11 +286,7 @@ class CrossMetrics:
         ]
         return min(candidates, key=lambda x: x[1]) if candidates else None
 
-    def slowest_convergence(
-        self,
-        tolerance: float = 0.01,
-        window: int   = 50,
-    ) -> tuple[str, int] | None:
+    def slowest_convergence(self, tolerance: float = 0.01, window: int = 50) -> tuple[str, int] | None:
         """Return (run_id, step) of the run that converged latest."""
         conv = self.convergence_per_run(tolerance, window)
         candidates = [
@@ -345,23 +311,14 @@ class CrossMetrics:
             if v is not None and abs(v - mu) > k * s
         ]
 
-    def first_crossing_per_run(
-        self,
-        threshold: float,
-        direction: str = "above",
-    ) -> dict[str, tuple[int, float] | None]:
+    def first_crossing_per_run(self, threshold: float, direction: str = "above") -> dict[str, tuple[int, float] | None]:
         """Return the first threshold crossing (step, value) per run."""
         return {
             run_id: m.first_crossing(series, threshold, direction)
             for run_id, series in self._series.items()
         }
 
-    def nth_crossing_per_run(
-        self,
-        threshold: float,
-        n: int,
-        direction: str = "above",
-    ) -> dict[str, tuple[int, float] | None]:
+    def nth_crossing_per_run(self, threshold: float, n: int, direction: str = "above") -> dict[str, tuple[int, float] | None]:
         """Return the Nth threshold crossing per run."""
         return {
             run_id: m.nth_crossing(series, threshold, n, direction)

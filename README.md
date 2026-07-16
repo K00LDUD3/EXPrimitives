@@ -692,6 +692,84 @@ with ledger.ExperimentManager(runs_dir=RUNS_DIR) as manager:
 
 ### B1. Gauge (Query & Analysis)
 Fluent query engine for single and multi-run metric inspection.
+```py
+gauge/
+├── __init__.py
+├── query.py
+├── cross.py
+├── metrics.py
+├── scopes.py
+├── report.py
+├── reader.py
+└── export.py
+```
+
+#### Usage
+```py
+from pathlib import Path
+import exprim.gauge as gauge
+from exprim.echo.event import Level, EventType
+
+
+# 1. fuzzy log queries & post-crash contextual inspection
+query = gauge.query(run.logs_path())
+fuzzy_warnings = query.level(Level.WARNING).fuzzy("overflow detected", threshold=0.7).collect()
+
+# inspect exact surrounding events (5 steps before/after) around critical crashes
+crashes = query.level(Level.ERROR).where(lambda e: "divergence" in e.message)
+crash_context = crashes.surrounding(n=3, before=5, after=5)
+
+
+# 2. high-frequency trajectory downsampling & anomaly profiling
+series = gauge.metrics.extract_from_source(run.metrics_path(), "reward")
+downsampled = gauge.metrics.downsample(series, every=10)
+smoothed = gauge.metrics.ema(series, alpha=0.05)
+
+# inspect numerical spikes, NaNs, Infs, and convergence checks
+anomalous_spikes = gauge.metrics.spikes(series, k=3.0)
+has_nans = gauge.metrics.nans(series)
+is_converged, conv_step = gauge.metrics.converged(series, tolerance=0.01, window=100)
+
+
+# 3. multi-run cross-querying (filtering populations by behavior)
+runs = manager.list_runs(name="lorenz_pid")
+cross_q = gauge.cross(runs)
+
+# find exact runs where loss exceeded threshold or encountered errors in specific scopes
+unstable_runs = cross_q.metric_name("loss").where(lambda e: e.payload.get("value", 0.0) > 100.0).runs_with_match()
+clean_runs = cross_q.scope("physics_step").runs_without_match(match="error")
+nth_crossings = cross_q.find_nth(n=1, metric="loss", condition=lambda val: val < 0.05)
+
+
+# 4. population envelopes, outliers & convergence ranking across sweeps
+loss_stats = gauge.metric(runs, "loss")
+population_envelope = loss_stats.envelope()  # min/max trajectory across all runs
+percentile_bands = loss_stats.percentiles([5.0, 50.0, 95.0])
+outlier_runs = loss_stats.outliers(k=2.5)
+
+# compare convergence speed across population runs
+fastest_run, fast_step = loss_stats.fastest_convergence(tolerance=0.01, window=50)
+slowest_run, slow_step = loss_stats.slowest_convergence(tolerance=0.01, window=50)
+
+
+# 5. hierarchical scope profiling & execution call trees
+scopes = gauge.cross_scopes(runs)
+slowest_physics_run, max_dur = scopes.slowest_run("physics_step")
+error_prone_runs = scopes.runs_with_errors_in_scope("eval_epoch")
+
+# inspect exact call tree and timing breakdown for a specific run
+events = gauge.reader.load_events(run.logs_path())
+tree = gauge.scopes.call_tree(events)
+timing = gauge.scopes.timing_report(events)
+
+
+# 6. population reports & multi-format exporting
+pop_summary = gauge.report.population_summary(runs, metric_names=["reward", "loss"])
+conv_report = gauge.report.convergence_report(runs, metrics=["loss"], tolerance=0.01)
+
+gauge.export.summary_to_json(pop_summary, Path("population_summary.json"))
+gauge.export.multi_series_to_csv(population_envelope, Path("loss_envelope.csv"))
+```
 
 ### Upcoming Primitives
 B1..B3, C1..C4, D1..D3, E1..E2

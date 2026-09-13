@@ -2,3 +2,9 @@ principles.md
 anchor/requirements.md
 __pycache__/
 *.py[cod]
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/

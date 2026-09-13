@@ -1,8 +1,30 @@
+
 # EXPrimitives
 a bunch of Experiment Primitives (config handler, loggers, experiment handlers, etc) targetting experiment as well as simulation usage.
 
 > For strictly typed documentation across all submodules, see [documentation/documentation.md](https://github.com/K00LDUD3/EXPrimitives/blob/main/documentation/documentation.md).
 
+
+
+# Installation
+
+Install directly from the GitHub repository:
+
+```bash
+pip install git+https://github.com/K00LDUD3/Prime-Fundamentum.git
+```
+
+Verify the installation:
+
+```bash
+python -c "import exprim; print(exprim.__file__); print(exprim.__all__)"
+python -c "import exprim.anchor, exprim.echo, exprim.frame, exprim.gauge, exprim.ledger; print('all subpackages OK')"
+```
+
+**Requirements:** Python 3.10 or newer.
+
+
+***
 ## Group A:
 
 ### A1. Anchor (Config Handler)

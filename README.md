@@ -11,7 +11,7 @@ a bunch of Experiment Primitives (config handler, loggers, experiment handlers, 
 Install directly from the GitHub repository:
 
 ```bash
-pip install git+https://github.com/K00LDUD3/Prime-Fundamentum.git
+pip install git+https://github.com/K00LDUD3/EXPrimitives.git
 ```
 
 Verify the installation:
